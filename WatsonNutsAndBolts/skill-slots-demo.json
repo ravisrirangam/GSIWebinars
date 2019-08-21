@@ -1,0 +1,393 @@
+{
+  "name": "slots-demo",
+  "intents": [
+    {
+      "intent": "greeting",
+      "examples": [
+        {
+          "text": "hi"
+        },
+        {
+          "text": "hey"
+        },
+        {
+          "text": "hi there"
+        },
+        {
+          "text": "hola"
+        },
+        {
+          "text": "hello"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "reservation",
+      "examples": [
+        {
+          "text": "i'd like to make a reservation"
+        },
+        {
+          "text": "I want to reserve a table for dinner"
+        },
+        {
+          "text": "Can 3 of us get a table for lunch?"
+        },
+        {
+          "text": "do you have openings for next Wednesday at 7?"
+        },
+        {
+          "text": "Is there availability for 4 on Tuesday night?"
+        },
+        {
+          "text": "i'd like to come in for brunch tomorrow"
+        },
+        {
+          "text": "can i reserve a table?"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "opening-hours",
+      "examples": [
+        {
+          "text": "Restaurant openin hours"
+        },
+        {
+          "text": "When do you open?"
+        },
+        {
+          "text": "When does the restaurant close?"
+        },
+        {
+          "text": "What time do you close?"
+        },
+        {
+          "text": "What are the restaurant opening hours"
+        },
+        {
+          "text": "At what time do you open?"
+        }
+      ],
+      "description": ""
+    },
+    {
+      "intent": "general",
+      "examples": [
+        {
+          "text": "what is my discount rate"
+        },
+        {
+          "text": "do I get any discount"
+        },
+        {
+          "text": "please tell my final price with discount"
+        },
+        {
+          "text": "How much is the discount"
+        },
+        {
+          "text": "what are my entitlements"
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "entities": [
+    {
+      "entity": "sys-time",
+      "values": []
+    },
+    {
+      "entity": "sys-number",
+      "values": []
+    },
+    {
+      "entity": "sys-date",
+      "values": []
+    }
+  ],
+  "language": "en",
+  "metadata": {
+    "api_version": {
+      "major_version": "v1",
+      "minor_version": "2018-09-20"
+    }
+  },
+  "skill_id": "dafdcc7d-63e8-4e3c-8142-18bec6f5deca",
+  "description": "",
+  "dialog_nodes": [
+    {
+      "type": "event_handler",
+      "output": {
+        "text": "What day would you like to come in?"
+      },
+      "parent": "slot_3_1558012599354",
+      "event_name": "focus",
+      "dialog_node": "handler_5_1558012599354",
+      "previous_sibling": "handler_4_1558012599354"
+    },
+    {
+      "type": "event_handler",
+      "parent": "slot_3_1558012599354",
+      "context": {
+        "date": "@sys-date"
+      },
+      "conditions": "@sys-date",
+      "event_name": "input",
+      "dialog_node": "handler_4_1558012599354"
+    },
+    {
+      "type": "event_handler",
+      "output": {
+        "text": "How many people will be dining?"
+      },
+      "parent": "slot_9_1558012651485",
+      "event_name": "focus",
+      "dialog_node": "handler_11_1558012651485",
+      "previous_sibling": "handler_10_1558012651485"
+    },
+    {
+      "type": "event_handler",
+      "parent": "slot_9_1558012651485",
+      "context": {
+        "guests": "@sys-number"
+      },
+      "conditions": "@sys-number",
+      "event_name": "input",
+      "dialog_node": "handler_10_1558012651485"
+    },
+    {
+      "type": "slot",
+      "parent": "node_2_1558012544576",
+      "variable": "$time",
+      "dialog_node": "slot_6_1558012643046",
+      "previous_sibling": "slot_3_1558012599354"
+    },
+    {
+      "type": "slot",
+      "output": {},
+      "parent": "node_2_1558012544576",
+      "metadata": {},
+      "variable": "$guests",
+      "dialog_node": "slot_9_1558012651485",
+      "previous_sibling": "slot_6_1558012643046"
+    },
+    {
+      "type": "slot",
+      "parent": "node_2_1558012544576",
+      "variable": "$date",
+      "dialog_node": "slot_3_1558012599354"
+    },
+    {
+      "type": "response_condition",
+      "title": "response_5_1566371855554",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "No discount at the moment"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_6_1566365046103",
+      "context": {
+        "app": {
+          "payment_method": "card or cash"
+        }
+      },
+      "conditions": "anything_else",
+      "dialog_node": "response_5_1566371855554",
+      "previous_sibling": "response_7_1566371804037"
+    },
+    {
+      "type": "response_condition",
+      "title": "response_7_1566371804037",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "You are entitled for discount of 20%"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "parent": "node_6_1566365046103",
+      "context": {
+        "app": {
+          "payment_method": "card/cash/COD"
+        }
+      },
+      "conditions": "$app.customer_loyalty==\"gold\"",
+      "dialog_node": "response_7_1566371804037"
+    },
+    {
+      "type": "event_handler",
+      "output": {
+        "text": "What time do you want the reservation to be made for?"
+      },
+      "parent": "slot_6_1558012643046",
+      "event_name": "focus",
+      "dialog_node": "handler_8_1558012643046",
+      "previous_sibling": "handler_7_1558012643046"
+    },
+    {
+      "type": "event_handler",
+      "parent": "slot_6_1558012643046",
+      "context": {
+        "time": "@sys-time"
+      },
+      "conditions": "@sys-time",
+      "event_name": "input",
+      "dialog_node": "handler_7_1558012643046"
+    },
+    {
+      "type": "standard",
+      "title": "context-variables",
+      "metadata": {
+        "_customization": {
+          "mcr": true
+        }
+      },
+      "conditions": "#general",
+      "dialog_node": "node_6_1566365046103",
+      "previous_sibling": "node_9_1566207923359"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "The restaurant opens at 7 AM and closes at 10 PM"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "conditions": "#opening-hours",
+      "digress_in": "returns",
+      "dialog_node": "node_9_1566207923359",
+      "digress_out": "allow_all",
+      "previous_sibling": "node_2_1558012544576"
+    },
+    {
+      "type": "frame",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Gotcha. Making reservation for $guests on $date at $time"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {
+        "fallback": "leave"
+      },
+      "conditions": "#reservation",
+      "digress_in": "returns",
+      "dialog_node": "node_2_1558012544576",
+      "digress_out": "allow_all",
+      "previous_sibling": "node_1_1558012468956",
+      "digress_out_slots": "allow_all"
+    },
+    {
+      "type": "standard",
+      "title": "Anything else",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "I didn't understand. You can try rephrasing."
+              },
+              {
+                "text": "Can you reword your statement? I'm not understanding."
+              },
+              {
+                "text": "I didn't get your meaning."
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {},
+      "conditions": "anything_else",
+      "dialog_node": "Anything else",
+      "previous_sibling": "node_6_1566365046103"
+    },
+    {
+      "type": "standard",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Glad to see you $fname. How can I help you today?"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "context": {
+        "time": "<? now() ?>"
+      },
+      "metadata": {},
+      "conditions": "#greeting",
+      "dialog_node": "node_1_1558012468956",
+      "previous_sibling": "Welcome"
+    },
+    {
+      "type": "standard",
+      "title": "Welcome",
+      "output": {
+        "generic": [
+          {
+            "values": [
+              {
+                "text": "Hello. How can I help you? You are in $timezone"
+              }
+            ],
+            "response_type": "text",
+            "selection_policy": "sequential"
+          }
+        ]
+      },
+      "metadata": {},
+      "conditions": "welcome",
+      "dialog_node": "Welcome"
+    }
+  ],
+  "workspace_id": "4be14c1e-8c21-4bd3-9073-535838fe8551",
+  "counterexamples": [],
+  "system_settings": {
+    "tooling": {
+      "store_generic_responses": true
+    }
+  },
+  "learning_opt_out": false,
+  "status": "Available"
+}
